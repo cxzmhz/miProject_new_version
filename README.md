@@ -1,2 +1,3 @@
-# miProject_new_version
-小米商城首页
+# miProject
+小米首页
+初版，功能和页面已完成
