@@ -74,26 +74,7 @@ $(function () {
   $.ajax({
     url: 'http://127.0.0.1:9900/api/items',
     success: function (data) {
-      // console.log(data);
       $('#slide .slideItems ul').html(template('itemTemplate', data));
-      // var dataList = [];
-      // for (var i = 0; i < $('#slide .slideItems>ul>li').length; i++) {
-      //   (function (i) {
-      //     $.ajax({
-      //       url: 'http://127.0.0.1:9900/api/items',
-      //       data: {
-      //         type: $('#slide .slideItems>ul>li').eq(i).attr('type')
-      //       },
-      //       dataType: 'json',
-      //       success: function (data) {
-      //         // console.log(data);
-      //         dataList[i] = data;
-      //         // console.log(dataList[i]);
-      //       }
-      //     })
-      //   })(i);
-      // }
-      // console.log(dataList);
       $('#slide .slideItems').on('mouseenter', 'li', function () {
         var $this = $(this);
         $('#slide .itemBox').empty();
@@ -115,10 +96,7 @@ $(function () {
           }
         });
         $('#slide .itemBox').show();
-        // var dArr = dataList[$(this).attr('index') - 1];
-        // for (var i = 0; i < dArr.length; i++) {
-        //   $('#slide .itemBox ul').eq(Math.floor(i / 6)).append(template('itemDetailTemplate', dArr[i]));
-        // }
+
       });
       $('#slide .items').on('mouseleave', function () {
         $('#slide .itemBox').hide();
@@ -157,6 +135,13 @@ $(function () {
     }, 500);
     // console.log(imgIndex);
   });
+
+  $('.lunbo').on('mouseenter', function () {
+    clearInterval(timeId);
+  })
+  $('.lunbo').on('mouseleave', function () {
+    timeId = setInterval(slideMoveRight, 2500);
+  })
   $.ajax({
     url: 'http://127.0.0.1:9900/api/lunbo',
     success: function (data) {
@@ -352,6 +337,18 @@ $(function () {
               $(this).parent().find('.smallbar').children('li').removeClass('active').eq(picIndex).addClass('active');
             }
           });
+          $('#content .subcontent>ul>li').eq(i).find('li').each(function(index){
+            $(this).attr('index', index);
+          })
+          $('#content .subcontent>ul>li').eq(i).find('li').on('click', function () {
+            $(this).siblings().removeClass('active');
+            $(this).addClass('active');
+            picIndex = $(this).attr('index');
+            // console.log(picIndex);
+            $(this).parent().parent().find('.slidebox').animate({
+              'left': -picIndex * picWid
+            }, 300);
+          })
         })(i);
       }
 
