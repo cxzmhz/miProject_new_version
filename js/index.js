@@ -226,35 +226,56 @@ $(function () {
   //搭配、配件、周边结束
 
   //推荐开始
-  function recomm(data) {
-    $('<ul></ul>').html(template('recommendTemplate', data)).addClass("recommendGoods clearfix").appendTo('#recommend .allGoods');
-    $('#recommend .allGoods').animate({ 'left': -goodsWidth * (pageIndex) }, 500);
-    pageIndex++;
-    if (pageIndex > 1) {
-      $('#recommend .last').removeClass('disabled');
-    }
-    $.ajax({
-      url: 'http://127.0.0.1:9900/api/recommend',
-      data: {
-        page: pageIndex + 1
-      },
-      dataType: 'json',
-      success: function (data) {
-        datas = data;
-        if (data == false) {
-          $('#recommend .next').addClass('disabled');
-        }
-      }
-    })
-  }
 
+  var flagIndex=1;
   var pageIndex = 1;
+  var indexFlag=true;
   var datas;
   var goodsWidth = $('#recommend .goodsList').width();
+  function recomm(data) {
+    // console.log(pageIndex);
+    if(indexFlag){
+      $('<ul></ul>').html(template('recommendTemplate', data)).addClass("recommendGoods clearfix").appendTo('#recommend .allGoods');
+      flagIndex++;
+    
+      $('#recommend .allGoods').animate({ 'left': -goodsWidth * (pageIndex) }, 500);
+      pageIndex++;
+      if (pageIndex > 1) {
+        $('#recommend .last').removeClass('disabled');
+      }
+      $.ajax({
+        url: 'http://127.0.0.1:9900/api/recommend',
+        data: {
+          page: flagIndex + 1
+        },
+        dataType: 'json',
+        success: function (data) {
+          if (data == false) {
+            $('#recommend .next').addClass('disabled');
+            indexFlag=false;
+          }else{
+            datas = data;
+          }
+        }
+      })
+    }else{
+      $('#recommend .allGoods').animate({ 'left': -goodsWidth * (pageIndex) }, 500);
+      pageIndex++;
+      // console.log(pageIndex);
+      if (pageIndex > 1) {
+        $('#recommend .last').removeClass('disabled');
+      }
+      if(pageIndex>=flagIndex){
+        $('#recommend .next').addClass('disabled');
+      }
+    }
+  }
+
+  
   $.ajax({
     url: 'http://127.0.0.1:9900/api/recommend',
     data: {
-      page: pageIndex
+      page: flagIndex
     },
     dataType: 'json',
     success: function (data) {
@@ -266,17 +287,19 @@ $(function () {
         if ($(this).hasClass('disabled')) {
           return;
         }
+        // console.log(datas);
         if (datas && datas != false) {
           recomm(datas);
         } else {
           $.ajax({
             url: 'http://127.0.0.1:9900/api/recommend',
             data: {
-              page: pageIndex + 1
+              page: flagIndex + 1
             },
             dataType: 'json',
             success: function (data) {
               if (data != false) {
+                // console.log(data);
                 recomm(data);
               }
             }
