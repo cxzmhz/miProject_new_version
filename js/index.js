@@ -47,15 +47,6 @@ $(function () {
       $('.navtop .navlist').on('mouseleave',function(){
         $('#nav .navdetail').stop(true).slideUp();
       })
-      // $('#nav').on('mouseleave', function () {
-      //   $('#nav .navdetail').stop(true).slideUp();
-      // });
-      // $('.navLogo').on('mouseenter', function () {
-      //   $('#nav .navdetail').stop(true).slideUp();
-      // });
-      // $('.search').on('mouseenter', function () {
-      //   $('#nav .navdetail').stop(true).slideUp();
-      // });
       $('#nav .navdetail').hover(function(){
         $(this).stop(true).slideDown();
       },function(){
